@@ -1,23 +1,25 @@
 import { rollup } from 'rollup';
-import { expect } from 'chai'
+import { expect } from 'chai';
 import graphql from '../src';
 import { writeFileSync } from 'fs';
 import { unlinkSync } from 'fs';
 
-process.chdir(__dirname);
+// dynamic import() from a data uri doesn't work, and between ts and node,
+// import()ing the file didn't work either 🤷‍♂️
+/* eslint-disable @typescript-eslint/no-var-requires */
 
 describe('plugin', () => {
   afterEach(() => {
     try {
-      unlinkSync('./tmp.js')
-    } catch { }
+      unlinkSync('./tmp.js');
+    } catch { null; }
   });
 
   it('should parse a simple graphql file', async function() {
     const bundle = await rollup({
       input: 'samples/basic/basic.graphql',
       output: { exports: 'default' },
-      plugins: [graphql()]
+      plugins: [graphql()],
     });
 
     const { output: [{ code }] } = await bundle.generate({ format: 'cjs' });
@@ -35,8 +37,8 @@ describe('plugin', () => {
     expect(definition.name.value).to.equal('GetHero');
     expect(result.loc).to.be.ok;
     expect(result.loc.source).to.be.ok;
-    expect(result.loc.source.body).to.equal('query GetHero{hero{id name __typename}}')
-    const [{selectionSet: { selections }}] = definition.selectionSet.selections;
+    expect(result.loc.source.body).to.equal('query GetHero{hero{id name __typename}}');
+    const [{ selectionSet: { selections } }] = definition.selectionSet.selections;
     // fragment field3
     expect(selections.length).to.equal(3);
     expect(selections[0].name.value).to.equal('id');
@@ -48,7 +50,7 @@ describe('plugin', () => {
     const bundle = await rollup({
       input: 'samples/fragments/allHeroesQuery.graphql',
       output: { exports: 'default' },
-      plugins: [graphql()]
+      plugins: [graphql()],
     });
 
     const { output: [{ code }] } = await bundle.generate({ format: 'cjs' });
@@ -64,12 +66,12 @@ describe('plugin', () => {
     expect(definition.kind).to.equal('OperationDefinition');
     expect(definition.operation).to.equal('query');
     expect(definition.name.value).to.equal('GetHero');
-    const [{selectionSet: { selections }}] = definition.selectionSet.selections;
+    const [{ selectionSet: { selections } }] = definition.selectionSet.selections;
     // fragment fields
     expect(selections.length).to.equal(3);
     expect(selections[0].name.value).to.equal('id');
     expect(selections[1].name.value).to.equal('name');
     expect(selections[2].name.value).to.equal('__typename');
-    expect(result.loc.source.body).to.equal('query GetHero{hero{id name __typename}}')
+    expect(result.loc.source.body).to.equal('query GetHero{hero{id name __typename}}');
   });
 });

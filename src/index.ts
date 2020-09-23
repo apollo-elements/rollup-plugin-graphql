@@ -1,4 +1,4 @@
-import type { Plugin } from 'rollup';
+import type { Plugin, SourceDescription } from 'rollup';
 import type { DefinitionNode, DocumentNode } from 'graphql';
 import { createFilter } from 'rollup-pluginutils';
 import { resolve, dirname } from 'path';
@@ -46,7 +46,7 @@ export default function graphql(options?: Options): Plugin {
 
   return {
     name: 'graphql',
-    async transform(source, id) {
+    async transform(source, id): Promise<SourceDescription> {
       if (!filter(id)) return null;
       if (!filterExt.test(id)) return null;
 
