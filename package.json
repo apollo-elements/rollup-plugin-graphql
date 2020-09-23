@@ -4,10 +4,15 @@
   "description": "Import GraphQL Documents in your Modules",
   "main": "dist/rollup-plugin-graphql.cjs.js",
   "module": "dist/rollup-plugin-graphql.es.js",
+  "typings": "src/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/apollo-elements/rollup-plugin-graphql.git"
   },
+  "files": [
+    "dist",
+    "src"
+  ],
   "keywords": [
     "graphql",
     "rollup",
@@ -30,7 +35,7 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "graphql-mini-transforms": "^1.2.1",
+    "graphql-mini-transforms": "npm:@apollo-elements/graphql-mini-transforms@^1.2.1",
     "graphql-tag": "^2.11.0",
     "rollup-pluginutils": "^2.8.2"
   },

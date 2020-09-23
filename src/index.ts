@@ -5,8 +5,10 @@ import { resolve, dirname } from 'path';
 import { parse } from 'graphql';
 
 import { cleanDocument, extractImports } from 'graphql-mini-transforms';
-import { readFile } from 'fs/promises';
+import { readFile as rf } from 'fs';
+import { promisify } from 'util';
 
+const readFile = promisify(rf);
 
 export interface Options {
   include: string|string[],
@@ -54,8 +56,7 @@ export default function graphql(options?: Options): Plugin {
         await loadDocument(source, id).then(cleanDocument);
 
       return {
-        // code: `export default JSON.parse(${JSON.stringify(JSON.stringify(exported))});`,
-        code: `export default JSON.parse('${JSON.stringify(exported)}');`,
+        code: `export default JSON.parse(${JSON.stringify(JSON.stringify(exported))});`,
         map: { mappings: '' },
       };
     },
