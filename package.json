@@ -27,7 +27,7 @@
     "build:rollup": "rollup -c",
     "prebuild": "rm -rf dist/*",
     "prepublishOnly": "npm test && npm run build",
-    "lint": "eslint src"
+    "lint": "eslint"
   },
   "eslintConfig": {
     "extends": "@pwrs"
