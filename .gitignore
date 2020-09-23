@@ -1,3 +1,9 @@
 .DS_Store
 node_modules
 dist
+
+*.js
+*.js.map
+*.d.ts
+
+!test/samples/**/*.js

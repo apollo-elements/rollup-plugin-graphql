@@ -1,0 +1,15 @@
+{
+  "include": ["src", "test"],
+  "compilerOptions": {
+    "declaration": true,
+    "target": "es2017",
+    "module": "esnext",
+    "moduleResolution": "Node"
+  },
+  "ts-node": {
+    "preferTsExts": true,
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  },
+}
