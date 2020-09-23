@@ -4,7 +4,8 @@ import { createFilter } from 'rollup-pluginutils';
 import { resolve, dirname } from 'path';
 import { parse } from 'graphql';
 
-import { cleanDocument, extractImports } from 'graphql-mini-transforms';
+// TODO: use upstream after merge
+import { cleanDocument, extractImports } from '@apollo-elements/graphql-mini-transforms';
 import { readFile as rf } from 'fs';
 import { promisify } from 'util';
 
@@ -53,7 +54,8 @@ export default function graphql(options?: Options): Plugin {
       if (!filterExt.test(id)) return null;
 
       const exported =
-        await loadDocument(source, id).then(cleanDocument);
+        await loadDocument(source, id)
+          .then(document => cleanDocument(document, { addTypename: false }));
 
       return {
         code: `export default JSON.parse(${JSON.stringify(JSON.stringify(exported))});`,
