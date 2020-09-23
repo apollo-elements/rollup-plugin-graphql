@@ -2,7 +2,7 @@ import type { Plugin } from 'rollup';
 import type { DefinitionNode, DocumentNode } from 'graphql';
 import { createFilter } from 'rollup-pluginutils';
 import { resolve, dirname } from 'path';
-import { parse} from 'graphql';
+import { parse } from 'graphql';
 
 import { cleanDocument, extractImports } from 'graphql-mini-transforms';
 import { readFile } from 'fs/promises';
@@ -31,7 +31,7 @@ async function loadDocument(rawSource: string | Buffer, id: string): Promise<Doc
       imports
         .map(relativePath => resolve(dirname(id), relativePath))
         .map(absolutePath => readFile(absolutePath, 'utf-8')
-        .then(source => loadDocument(source, absolutePath)))
+          .then(source => loadDocument(source, absolutePath)))
     );
 
   for (const { definitions } of resolvedImports)
@@ -50,16 +50,14 @@ export default function graphql(options?: Options): Plugin {
       if (!filter(id)) return null;
       if (!filterExt.test(id)) return null;
 
-      try {
-        const exported = await loadDocument(source, id).then(cleanDocument);
-        return {
-          // code: `export default JSON.parse(${JSON.stringify(JSON.stringify(exported))});`,
-          code: `export default ${JSON.stringify(exported)};`,
-          map: { mappings: '' }
-        }
-      } catch (error) {
-        throw error;
-      }
-    }
+      const exported =
+        await loadDocument(source, id).then(cleanDocument);
+
+      return {
+        // code: `export default JSON.parse(${JSON.stringify(JSON.stringify(exported))});`,
+        code: `export default JSON.parse('${JSON.stringify(exported)}');`,
+        map: { mappings: '' },
+      };
+    },
   };
 }
