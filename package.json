@@ -1,6 +1,6 @@
 {
   "name": "@apollo-elements/rollup-plugin-graphql",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Import GraphQL Documents in your Modules",
   "main": "dist/rollup-plugin-graphql.cjs.js",
   "module": "dist/rollup-plugin-graphql.es.js",
